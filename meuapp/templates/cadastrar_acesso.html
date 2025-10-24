@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Usuário</title>
+    <style>
+        .container {
+            font-family: Arial, sans-serif;
+            width: 50%;
+            margin: 50px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        form {
+            width: 100%;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #28a745;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastrar Acesso</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <center>
+                <button type="submit">Cadastrar</button>
+            </center>
+        </form>
+
+        <a href="{% url 'lista_usuarios' %}">Listar Usuários</a>
+    </div>
+</body>
+</html>

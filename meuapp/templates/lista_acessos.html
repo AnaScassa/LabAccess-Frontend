@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Lista de Acessos{% endblock %}
+{% block content %}
+
+<div class="card p-4 shadow-sm">
+    <h2 class="mb-3">Filtrar Acessos por Usuário</h2>
+
+    <form id="filtroForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+    </form>
+
+    <div id="resultado" class="mt-4"></div>
+</div>
+
+<script>
+document.getElementById('filtroForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch("{% url 'lista_acessos' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {'X-CSRFToken': formData.get('csrfmiddlewaretoken')}
+    })
+    .then(res => res.json())
+    .then(data => {
+        let html = '<h4>Acessos:</h4><ul>';
+        data.forEach(a => {
+            html += `<li>${a.data_acesso}  -  ${a.desc_evento}  -  ${a.desc_area}  - ${a.ent_sai}</l1>`;
+
+           
+        });
+        html += '</ul>';
+        document.getElementById('resultado').innerHTML = html;
+    });
+});
+</script>
+
+{% endblock %}
