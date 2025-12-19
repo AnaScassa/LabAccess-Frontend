@@ -1,5 +1,9 @@
 from django import forms
+from django.urls import reverse
 from .models import Usuario , Acesso
+from crispy_forms.helper import FormHelper, Layout
+from crispy_forms.layout import Submit, Row, Column, Field
+from crispy_forms.bootstrap import FormActions
 
 class UsuarioForm(forms.ModelForm):
     class Meta:
@@ -61,3 +65,70 @@ class UsuarioFiltroForm(forms.Form):
         required=False,
         label="Selecionar Usuário"
     )
+    porta = forms.ChoiceField(
+        choices=[
+            ('ccs', 'ccs'),
+            ('ccs_lab', 'ccs_lab'),
+            ('todos', 'todos'),
+        ],
+        widget= forms.RadioSelect(),
+        label="Selecionar porta"
+    )
+    data = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False,
+        label="Selecionar Data"
+    )
+
+class ExampleForm(forms.Form):
+    nome = forms.CharField(label="Seu nome", max_length=100)
+    email = forms.EmailField(label="Email")
+    mensagem = forms.CharField(label="Mensagem", widget=forms.Textarea)
+    senha = forms.CharField(label="Senha", widget=forms.PasswordInput(), max_length=128)
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Enviar'))
+
+class ContatoForm(forms.Form):
+    nome = forms.CharField(label='Nome', max_length=100)
+    email = forms.EmailField(label='E-mail')
+    mensagem = forms.CharField(label='Mensagem', widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = reverse("contato") 
+        self.helper.add_input(Submit('submit', 'Enviar'))
+
+class AcessoCrispy(forms.Form):
+    arquivo = forms.FileField(
+        label='Selecione o arquivo',
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'carregar_acesso'  
+        self.helper.enctype = 'multipart/form-data' 
+        #self.helper.add_input(Submit('submit', 'Enviar Arquivo', css_class='btn btn-primary'))
+        self.helper.layout = Layout(
+            Row(
+                Field(
+                    "arquivo", 
+                    wrapper_class= "col-md",
+                    template="field.html"
+
+                ), 
+                Column(
+                    Submit('submit', 'Enviar Arquivo', css_class='btn btn-primary'),
+                    css_class= "col-md align-self-end"
+                )
+            )
+        )

@@ -3,6 +3,7 @@
 {% block content %}
 <div class="card p-4 shadow-sm">
     <h2 class="mb-3">Dados carregados</h2>
+    <p>{{ mensagem }}</p>
     <div class="table-responsive">
         {{ tabela_html|safe }}
     </div>
