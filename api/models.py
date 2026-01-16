@@ -97,6 +97,7 @@ class UserProfile(models.Model):
         """
         required_fields = ['degree_area', 'phone', 'emergency_contact', 'emergency_phone']
         return all(getattr(self, field) for field in required_fields)
+    
 class DegreeArea(models.Model):
     """
     Model representing the degree area.
