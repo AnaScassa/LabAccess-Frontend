@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
+import { useState, useEffect } from "react";
 
 export default function Upload() {
   const [mensagem, setMensagem] = useState("");
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState<string | null>(null);  
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
 
@@ -19,7 +19,7 @@ export default function Upload() {
     setToken(storedToken);
   }, []);
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {    
     e.preventDefault();
 
     if (!token) {

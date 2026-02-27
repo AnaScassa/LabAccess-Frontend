@@ -3,11 +3,19 @@ import CalculadorTempo from "../components/CalculadorTempo";
 import FiltroPortasCheckbox from "../components/FiltroPortasCheckbox";
 import { authFetch } from "../services/auth";
 
+type Usuario = {
+  matricula: string;
+  nome_usuario: string;
+  acessos?: {
+    desc_area: string;
+  }[];
+};
+
 export default function TempoPermanencia() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [usuarioAtual, setUsuarioAtual] = useState(null);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);  
+  const [usuarioAtual, setUsuarioAtual] = useState<Usuario | null>(null);  
   const [usuarioSelecionado, setUsuarioSelecionado] = useState("");
-  const [portasSelecionadas, setPortasSelecionadas] = useState([]);
+  const [portasSelecionadas, setPortasSelecionadas] = useState<string[]>([]);  
   console.log("TOKEN:", localStorage.getItem("access"));
   useEffect(() => {
     async function carregarUsuarios() {
@@ -44,7 +52,7 @@ export default function TempoPermanencia() {
     )
   );
 
-  function filtrarUsuario(matricula) {
+  function filtrarUsuario(matricula: string) {
     setUsuarioSelecionado(matricula);
 
     const usuario = usuarios.find(

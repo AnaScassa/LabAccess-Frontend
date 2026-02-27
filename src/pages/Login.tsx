@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [mensagem, setMensagem] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {    
     e.preventDefault();
 
     try {

@@ -1,11 +1,14 @@
-export async function authFetch(url, options = {}) {
-  let token = localStorage.getItem("access");
+export async function authFetch(
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const token = localStorage.getItem("access");
 
   if (!token) {
     throw new Error("Sem token");
   }
 
-  let res = await fetch(url, {
+  let response = await fetch(url, {
     ...options,
     headers: {
       ...(options.headers || {}),
@@ -13,27 +16,30 @@ export async function authFetch(url, options = {}) {
     },
   });
 
-  if (res.status === 401 || res.status === 403) {
+  if (response.status === 401 || response.status === 403) {
     const refresh = localStorage.getItem("refresh");
 
     if (!refresh) {
       throw new Error("Sem refresh token");
     }
 
-    const refreshRes = await fetch(
+    const refreshResponse = await fetch(
       "http://localhost:8000/api/acesso/token/refresh/",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ refresh }),
       }
     );
 
-    if (!refreshRes.ok) {
+    if (!refreshResponse.ok) {
       throw new Error("Refresh inválido");
     }
 
-    const data = await refreshRes.json();
+    const data: { access: string } = await refreshResponse.json();
+
     localStorage.setItem("access", data.access);
 
     return fetch(url, {
@@ -45,5 +51,5 @@ export async function authFetch(url, options = {}) {
     });
   }
 
-  return res;
+  return response;
 }
